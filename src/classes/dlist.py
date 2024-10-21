@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 
-
 class DNode:
     def __init__(self, e: object, prev_node: 'DNode' = None, next_node: 'DNode' = None):
         self.elem = e
         self.next = next_node
         self.prev = prev_node
-    
-    
+      
 class DList:
     def __init__(self) -> None:
         """creates an empty list"""

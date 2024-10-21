@@ -2,8 +2,7 @@
 # Implementation of Binary Tree
 # A node only saves the references to its children
 
-from dlist import DList
-
+from .dlist import DList
 
 class BinaryNode:
     def __init__(self, elem: object,
@@ -19,7 +18,6 @@ class BinaryNode:
 
     def __str__(self) -> str:
         return str(self.elem)
-
 
 class BinaryTree:
     def __init__(self) -> None:

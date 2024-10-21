@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from bintree import BinaryNode
-from bintree import BinaryTree
-
+from .bintree import BinaryNode
+from .bintree import BinaryTree
 
 class BinarySearchTree(BinaryTree):
 

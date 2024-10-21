@@ -1,20 +1,17 @@
 # -*- coding: utf-8 -*-
 
 # FILE NAME: performance_comparison.py
-# AUTHOR: Leo Cabezas Amigo (NIA: 100504261)
+# AUTHOR: Leo Cabezas Amigo
 
 # Determines whether solution_classes.py or solution_classes_no_mod.py will be imported
+
 using_no_mod = False
 
-if using_no_mod:
-    from solution_classes_no_mod import BSTa
-    from solution_classes_no_mod import BSTb
-else:
-    from solution_classes import BSTa
-    from solution_classes import BSTb
+from classes.solution_classes import BSTa
+from classes.solution_classes import BSTb
 
 import random
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 def get_recursive_call_count(min_tree_size, max_tree_size, sample_step, elem_sparseness_const):
     # Initializes data lists
@@ -57,14 +54,23 @@ def get_recursive_call_count(min_tree_size, max_tree_size, sample_step, elem_spa
         tree_b_recursions.append(tree_b.recursions)
         
         # Prints a progress message to screen
-        print("Processed tree size: ", size, "/", max_tree_size + 1)
+        print("Processed tree size =", size, "; End size =", max_tree_size + 1)
         
         # Sets tree size for the next iteration
         size += sample_step
     
-    rec_call_cmp_list = [(recs_a / recs_b - 1) * 100 for recs_a, recs_b in zip(tree_a_recursions, tree_b_recursions)]
-    print(format(sum(rec_call_cmp_list) / len(rec_call_cmp_list), ".2f") + "%")
+    exec_rec_cmp_list = list()
+    for recs_a, recs_b in zip(tree_a_recursions, tree_b_recursions):
+        if recs_b != 0.0:
+            exec_rec_cmp_list.append((recs_a / recs_b - 1) * 100)
+        else:
+            exec_rec_cmp_list.append((recs_a / 0.00000001 - 1) * 100)
     
+    efficiency_diff = sum(exec_rec_cmp_list) / len(exec_rec_cmp_list)
+    # print(format(efficiency_diff, ".2f") + "%")
+    return efficiency_diff
+    
+    """
     # Plots data from both algorithms using matplotlib
     plt.plot(sizes, tree_a_recursions, label = "My solution")
     plt.plot(sizes, tree_b_recursions, label = "Your solution")
@@ -74,6 +80,21 @@ def get_recursive_call_count(min_tree_size, max_tree_size, sample_step, elem_spa
     
     plt.legend()
     plt.show()
+    """
     
 if __name__ == '__main__':
-    recursive_calls_cmp(1, 10000, 10, 10)
+    import sys
+    
+    try:
+        tests_performed = int(sys.argv[1])
+    except:
+        tests_performed = 3
+    
+    results = list()
+    for i in range(tests_performed):
+        print()
+        results.append(get_recursive_call_count(1, 100000, 1000, 1))
+        print(f"\n ==============TEST #{i + 1} COMPLETED==============")
+    
+    average_effic_diff = sum(results) / len(results)
+    print("Recursive calls reduction (%) =", format(average_effic_diff, ".2f") + "%")

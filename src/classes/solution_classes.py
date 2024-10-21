@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 # FILE NAME: performance_comparison.py
-# AUTHOR: Leo Cabezas Amigo (NIA: 100504261)
+# AUTHOR: Leo Cabezas Amigo
 
-from bintree import BinaryNode
-from bst import BinarySearchTree
+from .bintree import BinaryNode
+from .bst import BinarySearchTree
 
 class BSTa(BinarySearchTree):   # Class for my solution
     def __init__(self):
@@ -28,11 +28,12 @@ class BSTa(BinarySearchTree):   # Class for my solution
         if node.left == None and node.right == None and node.elem < min:
             myList.append(node.elem)
         
+        # MODIFICATION: empty nodes are not visited, thus increasing performance
         if node.elem >= min:
-            self._outsideRangeFromBelow(min, node.left, myList)
+            if node.left != None: self._outsideRangeFromBelow(min, node.left, myList)
         else:
-            self._outsideRangeFromBelow(min, node.left, myList)
-            self._outsideRangeFromBelow(min, node.right, myList)
+            if node.left != None: self._outsideRangeFromBelow(min, node.left, myList)
+            if node.right != None: self._outsideRangeFromBelow(min, node.right, myList)
 
     def _outsideRangeFromAbove(self, max: int, node: BinaryNode, myList: list):
         self.recursions += 1    # Updates recursion call count
@@ -42,13 +43,14 @@ class BSTa(BinarySearchTree):   # Class for my solution
         if node.left == None and node.right == None and node.elem > max:
             myList.append(node.elem)
         
+        # MODIFICATION: empty nodes are not visited, thus increasing performance
         if node.elem <= max:
-            self._outsideRangeFromAbove(max, node.right, myList)
+            if node.right != None: self._outsideRangeFromAbove(max, node.right, myList)
         else:
-            self._outsideRangeFromAbove(max, node.left, myList)
-            self._outsideRangeFromAbove(max, node.right, myList)
+            if node.left != None: self._outsideRangeFromAbove(max, node.left, myList)
+            if node.right != None: self._outsideRangeFromAbove(max, node.right, myList)
 
-class BSTb(BinarySearchTree):   # Class for your solution (identical to class BSTb in solution_classes.py)
+class BSTb(BinarySearchTree):   # Class for your solution (identical to class BSTb in solution_classes_no_mod.py)
     def __init__(self):
         super(BSTb, self).__init__()
         self.recursions = 0 # Recursion call count
@@ -59,7 +61,7 @@ class BSTb(BinarySearchTree):   # Class for your solution (identical to class BS
         return leafs
 
     # finds all nodes having value outside the given range
-    def _outsideRange(self, node: BinaryNode, min: int, max: int, leafs: []) -> object:
+    def _outsideRange(self, node: BinaryNode, min: int, max: int, leafs: list) -> object:
         self.recursions += 1    # Updates recursion call count
         if node is not None:
             node.left = self._outsideRange(node.left, min, max, leafs)
@@ -70,3 +72,4 @@ class BSTb(BinarySearchTree):   # Class for your solution (identical to class BS
 
         # if node is not leaf, return node and continue recursion
         return node
+

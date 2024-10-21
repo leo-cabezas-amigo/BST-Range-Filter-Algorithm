@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # FILE NAME: performance_comparison.py
-# AUTHOR: Leo Cabezas Amigo (NIA: 100504261)
+# AUTHOR: Leo Cabezas Amigo
 
 # WARNING: Accuracy of results may be influenced by processes being
 # executed on the background. For best results, terminate all background
@@ -9,18 +9,15 @@
 # the machine until testing is completed.
 
 # Determines whether solution_classes.py or solution_classes_no_mod.py will be imported
+
 using_no_mod = False
 
-if using_no_mod:
-    from solution_classes_no_mod import BSTa
-    from solution_classes_no_mod import BSTb
-else:
-    from solution_classes import BSTa
-    from solution_classes import BSTb
+from classes.solution_classes import BSTa
+from classes.solution_classes import BSTb
 
 import random
 import time
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 def get_exec_times(min_tree_size, max_tree_size, sample_step, elem_sparseness_const):
     # Initializes data lists
@@ -88,7 +85,7 @@ def get_exec_times(min_tree_size, max_tree_size, sample_step, elem_sparseness_co
         tree_b_exec_times.append(exec_time_b)
         
         # Prints a progress message to screen
-        print("Processed tree size: ", size, "/", max_tree_size + 1)
+        print("Processed tree size =", size, "; End size =", max_tree_size + 1)
         
         # Sets tree size for the next iteration
         size += sample_step
@@ -98,7 +95,7 @@ def get_exec_times(min_tree_size, max_tree_size, sample_step, elem_sparseness_co
         if recs_b != 0.0:
             exec_time_cmp_list.append((recs_a / recs_b - 1) * 100)
         else:
-            print(recs_a, recs_b)
+            exec_time_cmp_list.append((recs_a / 0.00000001 - 1) * 100)
     
     efficiency_diff = sum(exec_time_cmp_list) / len(exec_time_cmp_list)
     # print(format(efficiency_diff, ".2f") + "%")
@@ -122,11 +119,13 @@ if __name__ == '__main__':
     try:
         tests_performed = int(sys.argv[1])
     except:
-        raise Exception("Error: invalid/not enough arguments.")
+        tests_performed = 10
     
     results = list()
     for i in range(tests_performed):
+        print()
         results.append(get_exec_times(1, 100000, 1000, 1))
+        print(f"\n ==============TEST #{i + 1} COMPLETED==============")
     
     average_effic_diff = sum(results) / len(results)
-    print(format(average_effic_diff, ".2f") + "%")
+    print("Execution time reduction (%) =", format(average_effic_diff, ".2f") + "%")
